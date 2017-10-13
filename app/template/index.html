@@ -1,0 +1,105 @@
+<html>
+  <head>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="download.js" charset="utf-8"></script>
+    <script src="jszip-utils.mim.js" charset="utf-8"></script>
+    <script src="jszip.js" charset="utf-8"></script>
+    <script src="main2.js" charset="utf-8"></script>
+    <title>Image Gallery</title>
+  </head>
+  <body>
+    <h1>Reddit image gallery</h1>
+    <div class="container-fluid">
+        <div class="row-fluid">
+          <div class="col-xs-12 col-sm-6 col-md-6">
+            <div class="form-group">
+              <div class='input-group date' id='startdate'>
+                <input type='text' class="form-control" />
+                  <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                  </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <div class="form-group">
+              <div class='input-group date' id='enddate'>
+                <input type='text' class="form-control" />
+                  <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                  </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-2">
+              <button id="download">Download selected</button>
+          </div>
+        </div>
+        {% for url_list in urls %}
+        <div class="row-fluid">
+          {% for url in url_list %}
+          <div class="col-sm-2">
+            <img src="{{ url }}" style="width: 100px; height: 100px; background-position: 50% 50%; background-repeat: no-repeat; background-size: cover;"/>
+            <input type="checkbox" class="checkbox", id="check1", value="{{ url }}" />
+          </div>
+          {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#startdate').datetimepicker();
+        });
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $('#enddate').datetimepicker();
+        });
+    </script>
+
+    <script>
+        function getChecked(){
+            var checkboxes = document.getElementsByClassName("checkbox");
+            var checked = [];
+            for (var i = 0; i < checkboxes.length; i++){
+                if(checkboxes[i].checked){
+                    checked.push(checkboxes[i].value);
+                    }
+                }
+            return checked;
+            }
+    </script>
+
+    <script>
+
+     $('#download').click(function() {
+       var checked = getChecked();
+       download(checked);
+     });
+
+    var download = function() {
+       for(var i=0; i<arguments.length; i++) {
+         var iframe = $('<iframe style="visibility: collapse;"></iframe>');
+         $('body').append(iframe);
+         var content = iframe[0].contentDocument;
+         var form = '<form action="' + arguments[i] + '" method="GET"></form>';
+         content.write(form);
+         $('form', content).submit();
+         setTimeout((function(iframe) {
+           return function() {
+             iframe.remove();
+           }
+         })(iframe), 2000);
+       }
+     }
+    </script>
+
+  </body>
+</html>
