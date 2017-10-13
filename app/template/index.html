@@ -66,19 +66,6 @@
     </script>
 
     <script>
-        function getChecked(){
-            var checkboxes = document.getElementsByClassName("checkbox");
-            var checked = [];
-            for (var i = 0; i < checkboxes.length; i++){
-                if(checkboxes[i].checked){
-                    checked.push(checkboxes[i].value);
-                    }
-                }
-            return checked;
-            }
-    </script>
-
-    <script>
 
      $('#download').click(function() {
        var checked = getChecked();
